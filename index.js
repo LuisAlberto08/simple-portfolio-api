@@ -6,6 +6,7 @@ const PORT = 3000;
 // Route imports
 const aboutRoute = require('./routes/about');
 const projectsRoute = require('./routes/projects');
+const contactRoute = require('./routes/contact');
 
 // Middleware
 app.use(express.json());
@@ -13,7 +14,8 @@ app.use(express.static('public'));
 
 // Route registration
 app.use('/about', aboutRoute);
-app.use('/projects', projectsRoute);
+app.use('/projects', projectsRoute)
+app.use('/contact', contactRoute);
 
 // Contact routes
 app.get('/contact', (req, res) => {
