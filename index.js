@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const app = express();
+const logger = require('./middleware/logger');
 const PORT = 3000;
 
 // Route imports
@@ -11,6 +12,7 @@ const contactRoute = require('./routes/contact');
 // Middleware
 app.use(express.json());
 app.use(express.static('public'));
+app.use(logger);
 
 // Route registration
 app.use('/about', aboutRoute);
