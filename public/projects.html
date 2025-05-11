@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Project Manager</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Projects</h1>
+
+    <ul id="project-list"></ul>
+
+    <h2>Add a New Project</h2>
+    <form id="project-form">
+      <input type="text" id="name" placeholder="Project Name" required />
+      <input type="text" id="tech" placeholder="Tech Used" required />
+      <button type="submit">Add Project</button>
+    </form>
+
+    <div id="message"></div>
+  </div>
+
+  <script>
+    const projectList = document.getElementById('project-list');
+    const form = document.getElementById('project-form');
+    const message = document.getElementById('message');
+
+    // Load all projects
+    function loadProjects() {
+      fetch('/projects')
+        .then(res => res.json())
+        .then(data => {
+          projectList.innerHTML = '';
+          data.forEach(p => {
+            const li = document.createElement('li');
+            li.textContent = `${p.name} (${p.tech})`;
+            projectList.appendChild(li);
+          });
+        });
+    }
+
+    // Handle form submission
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const tech = document.getElementById('tech').value;
+
+      fetch('/projects', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, tech })
+      })
+      .then(res => res.json())
+      .then(data => {
+        message.textContent = data.message;
+        form.reset();
+        loadProjects();
+      })
+      .catch(err => {
+        message.textContent = 'Error adding project';
+        console.error(err);
+      });
+    });
+
+    // Load initial list
+    loadProjects();
+  </script>
+</body>
+</html>
